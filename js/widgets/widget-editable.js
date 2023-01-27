@@ -165,7 +165,7 @@
 						column = $this.closest( 'td' ).index(),
 						txt = $this.html();
 					if ( wo.editable_trimContent ) {
-						txt = $.trim( txt === '' ? '&nbsp;' : txt );
+						txt = txt === '' ? '&nbsp;' : txt.trim();
 					}
 					// prevent enter from adding into the content
 					$this
@@ -199,7 +199,7 @@
 						txt = $this.html(),
 						column = $this.closest( 'td' ).index();
 					if ( wo.editable_trimContent ) {
-						txt = $.trim( txt === '' ? '&nbsp;' : txt );
+						txt = txt === '' ? '&nbsp;' : txt.trim();
 					}
 					if ( e.which === 27 ) {
 						// user cancelled
@@ -255,7 +255,7 @@
 
 							if ( $.isFunction( wo.editable_blur ) ) {
 								txt = $this.html();
-								wo.editable_blur( wo.editable_trimContent ? $.trim( txt ) : txt, column, $this );
+								wo.editable_blur( wo.editable_trimContent ? txt.trim() : txt, column, $this );
 							}
 						}, 100 ) );
 						// restore original content on blur
