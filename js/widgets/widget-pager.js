@@ -251,7 +251,7 @@
 			c.$table
 				.off( namespace )
 				.on( 'filterInit filterStart '.split( ' ' ).join( namespace + ' ' ), function( e, filters ) {
-					p.currentFilters = $.isArray( filters ) ? filters : c.$table.data( 'lastSearch' );
+					p.currentFilters = Array.isArray( filters ) ? filters : c.$table.data( 'lastSearch' );
 					var filtersEqual;
 					if (p.ajax && e.type === 'filterInit') {
 						// ensure pager ajax is called after filter widget has initialized
@@ -752,7 +752,7 @@
 					p.totalRows = 0;
 				} else {
 					// process ajax object
-					if ( !$.isArray( result ) ) {
+					if ( !Array.isArray( result ) ) {
 						p.ajaxData = result;
 						c.totalRows = p.totalRows = result.total;
 						c.filteredRows = p.filteredRows = typeof result.filteredRows !== 'undefined' ?
@@ -785,7 +785,7 @@
 							tds += '<tr>';
 							for ( j = 0; j < d[i].length; j++ ) {
 								// build tbody cells; watch for data containing HTML markup - see #434
-								tds += /^\s*<td/.test( d[ i ][ j ] ) ? $.trim( d[ i ][ j ] ) : '<td>' + d[ i ][ j ] + '</td>';
+								tds += /^\s*<td/.test( d[ i ][ j ] ) ? d[ i ][ j ].trim() : '<td>' + d[ i ][ j ] + '</td>';
 							}
 							tds += '</tr>';
 						}

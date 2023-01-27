@@ -29,8 +29,8 @@
 			},
 			separator : function(c, $column, txt, num) {
 				var word = (txt + '').split(c.widgetOptions.group_separator);
-				// return $.trim(word && num > 0 && word.length >= num ? word[(num || 1) - 1] : '');
-				return $.trim( word[ num - 1 ] || '' );
+				// return (word && num > 0 && word.length >= num ? word[(num || 1) - 1] : '').trim();
+				return ( word[ num - 1 ] || '' ).trim();
 			},
 			text : function( c, $column, txt ) {
 				return txt;
@@ -71,7 +71,7 @@
 			return wo.group_months[ month + ( ( wo.group_months[0] || '' ) === '' ? 1 : 0 ) ];
 		},
 		findWeek : function( wo, day ) {
-			if ( $.isArray( wo.group_week ) ) {
+			if ( Array.isArray( wo.group_week ) ) {
 				return wo.group_week[ day ];
 			} else if ( !$.isEmptyObject( wo.group_week ) ) {
 				// CLDR returns { sun: "Sun", mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", ... }
@@ -102,7 +102,7 @@
 				wo = c.widgetOptions,
 				hasSort = typeof c.sortList[0] !== 'undefined',
 				data = {},
-				column = $.isArray( wo.group_forceColumn ) && typeof wo.group_forceColumn[0] !== 'undefined' ?
+				column = Array.isArray( wo.group_forceColumn ) && typeof wo.group_forceColumn[0] !== 'undefined' ?
 					( wo.group_enforceSort && !hasSort ? -1 : wo.group_forceColumn[0] ) :
 					( hasSort ? c.sortList[0][0] : -1 );
 			c.$table

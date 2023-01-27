@@ -47,7 +47,7 @@
 				c.$tbodies.each(function(tbindex, tb) {
 					$(tb).children('tr').each(function(rowindex, tr) {
 						$cell = $(tr).children().eq(column);
-						if (semver.valid( $.trim( $cell.text() ) ) === null) {
+						if (semver.valid( $cell.text().trim() ) === null) {
 							// make invalid semver numbers obvious
 							$cell.addClass('red').append(' (invalid)');
 						}

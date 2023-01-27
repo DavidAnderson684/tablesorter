@@ -4,7 +4,7 @@
 ██  ██ ██  ██   ██  ██ ██  ██   ██     ██ ██ ██ ██  ██ ██  ██ ██ ██▀▀    ▀▀▀██
 █████▀ ▀████▀   ██  ██ ▀████▀   ██     ██ ██ ██ ▀████▀ █████▀ ██ ██     █████▀
 */
-/*! tablesorter (FORK) - updated 2023-01-19 (v2.31.3)*/
+/*! tablesorter (FORK) - updated 2023-01-27 (v2.31.3)*/
 /* Includes widgets ( storage,uitheme,columns,filter,stickyHeaders,resizable,saveSort ) */
 (function(factory){if (typeof define === 'function' && define.amd){define(['jquery'], factory);} else if (typeof module === 'object' && typeof module.exports === 'object'){module.exports = factory(require('jquery'));} else {factory(jQuery);}}(function(jQuery) {
 /*! TableSorter (FORK) v2.31.3 *//*
@@ -3011,17 +3011,16 @@
 			console.log('Storage >> Using', hasStorage ? storageType : 'cookies');
 		}
 		// *** get value ***
-		if (JSON.parse()) {
-			if (hasStorage) {
-				values = JSON.parse( window[storageType][key] || 'null' ) || {};
-			} else {
-				// old browser, using cookies
-				cookies = document.cookie.split(/[;\s|=]/);
-				// add one to get from the key to the value
-				cookieIndex = $.inArray(key, cookies) + 1;
-				values = (cookieIndex !== 0) ? JSON.parse(cookies[cookieIndex] || 'null') || {} : {};
-			}
+		if (hasStorage) {
+			values = JSON.parse( window[storageType][key] || 'null' ) || {};
+		} else {
+			// old browser, using cookies
+			cookies = document.cookie.split(/[;\s|=]/);
+			// add one to get from the key to the value
+			cookieIndex = $.inArray(key, cookies) + 1;
+			values = (cookieIndex !== 0) ? JSON.parse(cookies[cookieIndex] || 'null') || {} : {};
 		}
+
 		// allow value to be an empty string too
 		if (typeof value !== 'undefined' && window.JSON && JSON.hasOwnProperty('stringify')) {
 			// add unique identifiers = url pathname > table ID/index on page > data
@@ -3108,8 +3107,8 @@
 				$headers = c.$headers.add( $( c.namespace + '_extra_headers' ) ),
 				theme = c.theme || 'jui',
 				themes = themesAll[theme] || {},
-				remove = $.trim( [ themes.sortNone, themes.sortDesc, themes.sortAsc, themes.active ].join( ' ' ) ),
-				iconRmv = $.trim( [ themes.iconSortNone, themes.iconSortDesc, themes.iconSortAsc ].join( ' ' ) ),
+				remove = [ themes.sortNone, themes.sortDesc, themes.sortAsc, themes.active ].join( ' ' ).trim(),
+				iconRmv = [ themes.iconSortNone, themes.iconSortDesc, themes.iconSortAsc ].join( ' ' ).trim(),
 				debug = ts.debug(c, 'uitheme');
 			if (debug) { time = new Date(); }
 			// initialization code - run once
@@ -3120,8 +3119,8 @@
 				oldremove =  hasOldTheme ? [ oldtheme.sortNone, oldtheme.sortDesc, oldtheme.sortAsc, oldtheme.active ].join( ' ' ) : '';
 				oldIconRmv = hasOldTheme ? [ oldtheme.iconSortNone, oldtheme.iconSortDesc, oldtheme.iconSortAsc ].join( ' ' ) : '';
 				if (hasOldTheme) {
-					wo.zebra[0] = $.trim( ' ' + wo.zebra[0].replace(' ' + oldtheme.even, '') );
-					wo.zebra[1] = $.trim( ' ' + wo.zebra[1].replace(' ' + oldtheme.odd, '') );
+					wo.zebra[0] = ' ' + wo.zebra[0].replace(' ' + oldtheme.even, '').trim();
+					wo.zebra[1] = ' ' + wo.zebra[1].replace(' ' + oldtheme.odd, '').trim();
 					c.$tbodies.children().removeClass( [ oldtheme.even, oldtheme.odd ].join(' ') );
 				}
 				// update zebra stripes
@@ -3549,7 +3548,7 @@
 						savedSearch = query;
 					// parse filter value in case we're comparing numbers ( dates )
 					if ( parsed || parser.type === 'numeric' ) {
-						txt = $.trim( '' + data.iFilter.replace( tsfRegex.operators, '' ) );
+						txt = '' + data.iFilter.replace( tsfRegex.operators, '' ).trim();
 						result = tsf.parseFilter( c, txt, data, true );
 						query = ( typeof result === 'number' && result !== '' && !isNaN( result ) ) ? result : query;
 					}
@@ -3584,9 +3583,9 @@
 					if ( tsfRegex.exact.test( filter ) ) {
 						// look for exact not matches - see #628
 						filter = filter.replace( tsfRegex.exact, '' );
-						return filter === '' ? true : $.trim( filter ) !== data.iExact;
+						return filter === '' ? true : filter.trim() !== data.iExact;
 					} else {
-						indx = data.iExact.search( $.trim( filter ) );
+						indx = data.iExact.search( filter.trim() );
 						return filter === '' ? true :
 							// return true if not found
 							data.anyMatch ? indx < 0 :
@@ -3995,7 +3994,7 @@
 				filters = ts.getFilters( table ) || [];
 			if ( wo.filter_saveFilters && ts.storage ) {
 				saved = ts.storage( table, 'tablesorter-filters' ) || [];
-				isArray = $.isArray( saved );
+				isArray = Array.isArray( saved );
 				// make sure we're not just getting an empty array
 				if ( !( isArray && saved.join( '' ) === '' || !isArray ) ) {
 					filters = tsf.processFilters( saved );
@@ -4027,7 +4026,7 @@
 				// c.columns defined in computeThIndexes()
 				cellFilter = wo.filter_cellFilter,
 				columns = c.columns,
-				arry = $.isArray( cellFilter ),
+				arry = Array.isArray( cellFilter ),
 				buildFilter = '<tr role="search" class="' + tscss.filterRow + ' ' + c.cssIgnoreRow + '">';
 			for ( column = 0; column < columns; column++ ) {
 				if ( c.$headerIndexed[ column ].length ) {
@@ -4093,7 +4092,7 @@
 					}
 					if ( buildFilter ) {
 						// add filter class name
-						name = ( $.isArray( wo.filter_cssFilter ) ?
+						name = ( Array.isArray( wo.filter_cssFilter ) ?
 							( typeof wo.filter_cssFilter[column] !== 'undefined' ? wo.filter_cssFilter[column] || '' : '' ) :
 							wo.filter_cssFilter ) || '';
 						// copy data-column from table cell (it will include colspan)
@@ -4107,7 +4106,7 @@
 							var regex = new RegExp(attr, 'g'),
 								data = $header.attr('data-' + attr.replace(/{{|}}/g, '')),
 								text = typeof data === 'undefined' ? $header.text() : data;
-							name = name.replace( regex, $.trim( text ) );
+							name = name.replace( regex, text.trim() );
 						});
 						buildFilter.attr({
 							'data-column': $filter.attr( 'data-column' ),
@@ -4244,8 +4243,8 @@
 				f1 = [],
 				f2 = [],
 				len = c.columns + 1; // add one to include anyMatch filter
-			filter1 = $.isArray(filter1) ? filter1 : [];
-			filter2 = $.isArray(filter2) ? filter2 : [];
+			filter1 = Array.isArray(filter1) ? filter1 : [];
+			filter2 = Array.isArray(filter2) ? filter2 : [];
 			for (indx = 0; indx < len; indx++) {
 				f1[indx] = filter1[indx] || '';
 				f2[indx] = filter2[indx] || '';
@@ -4255,7 +4254,7 @@
 		checkFilters: function( table, filter, skipFirst ) {
 			var c = table.config,
 				wo = c.widgetOptions,
-				filterArray = $.isArray( filter ),
+				filterArray = Array.isArray( filter ),
 				filters = ( filterArray ) ? filter : ts.getFilters( table, true ),
 				currentFilters = filters || []; // current filter values
 			// prevent errors if delay init is set
@@ -4362,7 +4361,7 @@
 			if ( filter === '' ) { return filter; }
 			var regex = tsfRegex.iQuery,
 				maskLen = mask.match( tsfRegex.igQuery ).length,
-				query = maskLen > 1 ? $.trim( filter ).split( /\s/ ) : [ $.trim( filter ) ],
+				query = maskLen > 1 ? filter.trim().split( /\s/ ) : [ filter.trim() ],
 				len = query.length - 1,
 				indx = 0,
 				val = mask;
@@ -4453,7 +4452,7 @@
 				// only target 'all' column inputs on initialization
 				// & don't target 'all' column inputs if they don't exist
 				targets = wo.filter_initialized || !$input.filter( wo.filter_anyColumnSelector ).length,
-				val = $.trim( tsf.getLatestSearch( $input ).attr( 'data-column' ) || '' );
+				val = ( tsf.getLatestSearch( $input ).attr( 'data-column' ) || '' ).trim();
 			return tsf.findRange( c, val, !targets );
 		},
 		processTypes: function( c, data, vars ) {
@@ -4522,7 +4521,7 @@
 							txt = data.cacheArray[ i ];
 						} else {
 							txt = data.rawArray[ i ];
-							txt = $.trim( wo.filter_ignoreCase ? txt.toLowerCase() : txt );
+							txt = wo.filter_ignoreCase ? txt.toLowerCase().trim() : txt.trim();
 							if ( c.sortLocaleCompare ) {
 								txt = ts.replaceAccents( txt );
 							}
@@ -4926,7 +4925,7 @@
 			} else if ( fxn instanceof $ || ( $.type( fxn ) === 'string' && fxn.indexOf( '</option>' ) >= 0 ) ) {
 				// selectSource is a jQuery object or string of options
 				return fxn;
-			} else if ( $.isArray( fxn ) ) {
+			} else if ( Array.isArray( fxn ) ) {
 				arry = fxn;
 			} else if ( $.type( source ) === 'object' && fxn ) {
 				// custom select source function for a SPECIFIC COLUMN
@@ -4945,7 +4944,7 @@
 
 		},
 		processOptions: function( table, column, arry ) {
-			if ( !$.isArray( arry ) ) {
+			if ( !Array.isArray( arry ) ) {
 				return false;
 			}
 			table = $( table )[0];
@@ -5098,7 +5097,7 @@
 				}
 			}
 
-			if ( $.isArray( arry ) ) {
+			if ( Array.isArray( arry ) ) {
 				// build option list
 				for ( indx = 0; indx < arry.length; indx++ ) {
 					option = arry[ indx ];
@@ -5159,7 +5158,7 @@
 			// make sure there is a select there!
 			if ( $filter.length ) {
 				$filter[ updating ? 'html' : 'append' ]( options );
-				if ( !$.isArray( arry ) ) {
+				if ( !Array.isArray( arry ) ) {
 					// append options if arry is provided externally as a string or jQuery object
 					// options ( default value ) was already added
 					$filter.append( arry ).val( currentValue );
@@ -5196,7 +5195,7 @@
 		if ( ( getRaw !== true && wo && !wo.filter_columnFilters ) ||
 			// setFilters called, but last search is exactly the same as the current
 			// fixes issue #733 & #903 where calling update causes the input values to reset
-			( $.isArray(setFilters) && tsf.equalFilters(c, setFilters, c.lastSearch) )
+			( Array.isArray(setFilters) && tsf.equalFilters(c, setFilters, c.lastSearch) )
 		) {
 			return $( table ).data( 'lastSearch' ) || [];
 		}
@@ -5220,7 +5219,7 @@
 					if ( $column.length ) {
 						// move the latest search to the first slot in the array
 						$column = tsf.getLatestSearch( $column );
-						if ( $.isArray( setFilters ) ) {
+						if ( Array.isArray( setFilters ) ) {
 							// skip first ( latest input ) to maintain cursor position while typing
 							if ( skipFirst && $column.length > 1 ) {
 								$column = $column.slice( 1 );
@@ -6030,7 +6029,7 @@
 
 	function getStoredSortList(c) {
 		var stored = ts.storage( c.table, 'tablesorter-savesort' );
-		return (stored && stored.hasOwnProperty('sortList') && $.isArray(stored.sortList)) ? stored.sortList : [];
+		return (stored && stored.hasOwnProperty('sortList') && Array.isArray(stored.sortList)) ? stored.sortList : [];
 	}
 
 	function sortListChanged(c, sortList) {
