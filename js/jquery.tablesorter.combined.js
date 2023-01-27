@@ -3108,8 +3108,8 @@
 				$headers = c.$headers.add( $( c.namespace + '_extra_headers' ) ),
 				theme = c.theme || 'jui',
 				themes = themesAll[theme] || {},
-				remove = $.trim( [ themes.sortNone, themes.sortDesc, themes.sortAsc, themes.active ].join( ' ' ) ),
-				iconRmv = $.trim( [ themes.iconSortNone, themes.iconSortDesc, themes.iconSortAsc ].join( ' ' ) ),
+				remove = [ themes.sortNone, themes.sortDesc, themes.sortAsc, themes.active ].join( ' ' ).trim(),
+				iconRmv = [ themes.iconSortNone, themes.iconSortDesc, themes.iconSortAsc ].join( ' ' ).trim(),
 				debug = ts.debug(c, 'uitheme');
 			if (debug) { time = new Date(); }
 			// initialization code - run once
@@ -3120,8 +3120,8 @@
 				oldremove =  hasOldTheme ? [ oldtheme.sortNone, oldtheme.sortDesc, oldtheme.sortAsc, oldtheme.active ].join( ' ' ) : '';
 				oldIconRmv = hasOldTheme ? [ oldtheme.iconSortNone, oldtheme.iconSortDesc, oldtheme.iconSortAsc ].join( ' ' ) : '';
 				if (hasOldTheme) {
-					wo.zebra[0] = $.trim( ' ' + wo.zebra[0].replace(' ' + oldtheme.even, '') );
-					wo.zebra[1] = $.trim( ' ' + wo.zebra[1].replace(' ' + oldtheme.odd, '') );
+					wo.zebra[0] = ' ' + wo.zebra[0].replace(' ' + oldtheme.even, '').trim();
+					wo.zebra[1] = ' ' + wo.zebra[1].replace(' ' + oldtheme.odd, '').trim();
 					c.$tbodies.children().removeClass( [ oldtheme.even, oldtheme.odd ].join(' ') );
 				}
 				// update zebra stripes
@@ -3549,7 +3549,7 @@
 						savedSearch = query;
 					// parse filter value in case we're comparing numbers ( dates )
 					if ( parsed || parser.type === 'numeric' ) {
-						txt = $.trim( '' + data.iFilter.replace( tsfRegex.operators, '' ) );
+						txt = '' + data.iFilter.replace( tsfRegex.operators, '' ).trim();
 						result = tsf.parseFilter( c, txt, data, true );
 						query = ( typeof result === 'number' && result !== '' && !isNaN( result ) ) ? result : query;
 					}
@@ -3584,9 +3584,9 @@
 					if ( tsfRegex.exact.test( filter ) ) {
 						// look for exact not matches - see #628
 						filter = filter.replace( tsfRegex.exact, '' );
-						return filter === '' ? true : $.trim( filter ) !== data.iExact;
+						return filter === '' ? true : filter.trim() !== data.iExact;
 					} else {
-						indx = data.iExact.search( $.trim( filter ) );
+						indx = data.iExact.search( filter.trim() );
 						return filter === '' ? true :
 							// return true if not found
 							data.anyMatch ? indx < 0 :
@@ -4107,7 +4107,7 @@
 							var regex = new RegExp(attr, 'g'),
 								data = $header.attr('data-' + attr.replace(/{{|}}/g, '')),
 								text = typeof data === 'undefined' ? $header.text() : data;
-							name = name.replace( regex, $.trim( text ) );
+							name = name.replace( regex, text.trim() );
 						});
 						buildFilter.attr({
 							'data-column': $filter.attr( 'data-column' ),
@@ -4362,7 +4362,7 @@
 			if ( filter === '' ) { return filter; }
 			var regex = tsfRegex.iQuery,
 				maskLen = mask.match( tsfRegex.igQuery ).length,
-				query = maskLen > 1 ? $.trim( filter ).split( /\s/ ) : [ $.trim( filter ) ],
+				query = maskLen > 1 ? filter.trim().split( /\s/ ) : [ filter.trim() ],
 				len = query.length - 1,
 				indx = 0,
 				val = mask;
@@ -4453,7 +4453,7 @@
 				// only target 'all' column inputs on initialization
 				// & don't target 'all' column inputs if they don't exist
 				targets = wo.filter_initialized || !$input.filter( wo.filter_anyColumnSelector ).length,
-				val = $.trim( tsf.getLatestSearch( $input ).attr( 'data-column' ) || '' );
+				val = ( tsf.getLatestSearch( $input ).attr( 'data-column' ) || '' ).trim();
 			return tsf.findRange( c, val, !targets );
 		},
 		processTypes: function( c, data, vars ) {
@@ -4522,7 +4522,7 @@
 							txt = data.cacheArray[ i ];
 						} else {
 							txt = data.rawArray[ i ];
-							txt = $.trim( wo.filter_ignoreCase ? txt.toLowerCase() : txt );
+							txt = wo.filter_ignoreCase ? txt.toLowerCase().trim() : txt.trim();
 							if ( c.sortLocaleCompare ) {
 								txt = ts.replaceAccents( txt );
 							}
